@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WordType {
+  id          Int               @id @default(autoincrement())
+  type        String @unique
+  categories  WordTypeCategory[] // <-- Add this line to establish the backrelation
+  Word        Word[]
+}
+
+model WordTypeCategory {
+  id         Int        @id @default(autoincrement())
+  category   String
+  wordtypeId Int
+  WordType   WordType   @relation(fields: [wordtypeId], references: [id], onDelete: Cascade)
+  Word       Word[]
+}
+
+model Word {
+  id                  Int               @id @default(autoincrement())
+  original            String
+  translation         String
+  description         String?
+  markedAsStudied     Boolean           @default(false)
+  wordtypeId          Int
+  wordtypecategoryId  Int?
+  WordType            WordType          @relation(fields: [wordtypeId], references: [id])
+  WordTypeCategory    WordTypeCategory? @relation(fields: [wordtypecategoryId], references: [id])
+}
