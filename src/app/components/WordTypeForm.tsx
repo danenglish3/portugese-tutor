@@ -1,21 +1,28 @@
 'use client'; // Mark as a client component
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
+import PencilSVG from './icons/Pencil';
 
-interface AddWordTypeFormProps {
-  onAdd: (type: string) => Promise<void>;
+interface WordTypeFormProps {
+  onSubmit: (type: string) => Promise<void>;
+  initialType?: string; // This will be passed for editing
+  mode: 'add' | 'edit'; // Mode to differentiate between adding and editing
 }
 
-const AddWordTypeForm = ({ onAdd }: AddWordTypeFormProps) => {
-  const [newWordType, setNewWordType] = useState('');
+const WordTypeForm = ({ onSubmit, initialType = '', mode }: WordTypeFormProps) => {
+  const [wordType, setWordType] = useState(initialType);
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setWordType(initialType); // Update word type when initialType changes
+  }, [initialType]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
-      await onAdd(newWordType);
-      setNewWordType(''); // Clear input field after adding
+      await onSubmit(wordType);
+      setWordType(''); // Clear input field after submission
       setIsModalOpen(false); // Close the modal after submission
     });
   };
@@ -24,24 +31,27 @@ const AddWordTypeForm = ({ onAdd }: AddWordTypeFormProps) => {
     <div>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        className={mode === 'add' ? 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600' : ''}
       >
-        Add New
+        {mode === 'add' ? 'Add New' : <PencilSVG />}
       </button>
 
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-lg w-80">
-            <h2 className="text-xl font-semibold mb-4">Add New Word Type</h2>
-            
+            <h2 className="text-xl font-semibold mb-4">
+              {mode === 'add' ? 'Add New Word Type' : 'Edit Word Type'}
+            </h2>
+
             <form onSubmit={handleSubmit} className="mb-4">
               <input
                 type="text"
-                value={newWordType}
-                onChange={(e) => setNewWordType(e.target.value)}
-                placeholder="Enter new word type"
+                value={wordType}
+                onChange={(e) => setWordType(e.target.value)}
+                placeholder="Enter word type"
                 className="p-2 border rounded w-full"
+                disabled={mode === 'edit'} // Disable input in edit mode
               />
               <div className="flex justify-end space-x-4 mt-4">
                 <button
@@ -55,7 +65,7 @@ const AddWordTypeForm = ({ onAdd }: AddWordTypeFormProps) => {
                   type="submit"
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 >
-                  {isPending ? 'Adding...' : 'Add'}
+                  {isPending ? (mode === 'add' ? 'Adding...' : 'Updating...') : mode === 'add' ? 'Add' : 'Close'}
                 </button>
               </div>
             </form>
@@ -66,4 +76,4 @@ const AddWordTypeForm = ({ onAdd }: AddWordTypeFormProps) => {
   );
 };
 
-export default AddWordTypeForm;
+export default WordTypeForm;
