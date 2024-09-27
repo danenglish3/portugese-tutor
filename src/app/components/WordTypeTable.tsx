@@ -1,20 +1,17 @@
 'use client';
 
 import { useState } from "react";
-import WordTypeForm from "@/components/WordTypeForm"; // Reusable form for add/edit
 import PencilSVG from "./icons/Pencil";
 
 interface WordTypeTableProps {
-  wordTypes: any[]; // List of word types or categories
-  onAdd: (type: string) => Promise<void>; // Server action for adding
-  onDelete: (id: number) => Promise<void>; // Server action for deleting
-  type: 'wordType' | 'wordTypeCategory'; // New prop to specify the type
+  wordTypes: any[];
+  onDelete: (id: number) => Promise<void>;
+  type: 'wordType' | 'wordTypeCategory';
 }
 
-const WordTypeTable = ({ wordTypes: initialWordTypes, onAdd, onDelete, type }: WordTypeTableProps) => {
-  const [wordTypes, setWordTypes] = useState(initialWordTypes); // Local state for word types
-  const [selectedWordType, setSelectedWordType] = useState<any | null>(null); // For editing
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal state for edit
+const WordTypeTable = ({ wordTypes: initialWordTypes, onDelete, type }: WordTypeTableProps) => {
+  const [selectedWordType, setSelectedWordType] = useState<any | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Function to open the edit modal
   const openEditModal = (wordType: any) => {
@@ -28,38 +25,27 @@ const WordTypeTable = ({ wordTypes: initialWordTypes, onAdd, onDelete, type }: W
     setIsEditModalOpen(false);
   };
 
-  // Function to handle adding a word type
-  const handleAddWordType = async (type: string) => {
-    await onAdd(type);
-    setWordTypes((prev) => [...prev, { id: prev.length + 1, type }]); // Append the new word type
-  };
-
   // Function to handle deleting a word type
   const handleDeleteWordType = async () => {
     const confirmDelete = confirm('Are you sure you want to delete this word type?');
     if (confirmDelete && selectedWordType) {
-      await onDelete(selectedWordType.id); // Call delete function
-      setWordTypes((prev) => prev.filter((wt) => wt.id !== selectedWordType.id)); // Remove from state
-      closeEditModal(); // Close modal after deletion
+      await onDelete(selectedWordType.id);
+      closeEditModal();
     }
   };
 
   return (
     <div>
-      <div className="mb-4 float-right">
-        <WordTypeForm onSubmit={handleAddWordType} mode="add" /> {/* Form for adding */}
-      </div>
-
       <table className="min-w-full bg-white shadow-md rounded-lg">
         <thead>
           <tr>
             <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">{type === 'wordType' ? 'Type' : 'Category'}</th> {/* Dynamic header */}
+            <th className="px-4 py-2">{type === 'wordType' ? 'Type' : 'Category'}</th>
           </tr>
         </thead>
         <tbody>
-          {wordTypes.length > 0 ? (
-            wordTypes.map((wordType: any) => (
+          {initialWordTypes.length > 0 ? (
+            initialWordTypes.map((wordType: any) => (
               <tr key={wordType.id}>
                 <td className="border px-4 py-2">{wordType.id}</td>
                 <td className="border px-4 py-2">{wordType.type || wordType.category} {/* Dynamic data */}

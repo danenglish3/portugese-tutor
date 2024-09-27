@@ -5,35 +5,27 @@ import PencilSVG from './icons/Pencil';
 
 interface WordTypeFormProps {
   onSubmit: (type: string) => Promise<void>;
-  onDelete?: (id: string) => Promise<void>; // Add onDelete prop
-  initialType?: string; // This will be passed for editing
-  mode: 'add' | 'edit'; // Mode to differentiate between adding and editing
-  id?: string; // ID of the word type for editing/deleting
+  initialType?: string; 
+  mode: 'add' | 'edit';
+  id?: string; 
 }
 
-const WordTypeForm = ({ onSubmit, onDelete, initialType = '', mode, id }: WordTypeFormProps) => {
+const WordTypeForm = ({ onSubmit, initialType = '', mode, id }: WordTypeFormProps) => {
   const [wordType, setWordType] = useState(initialType);
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setWordType(initialType); // Update wordType when initialType changes
+    setWordType(initialType); 
   }, [initialType]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
-      await onSubmit(wordType); // Submit the word type
-      setWordType(''); // Clear input field after submission
-      setIsModalOpen(false); // Close the modal after submission
+      await onSubmit(wordType);
+      setWordType(''); 
+      setIsModalOpen(false); 
     });
-  };
-
-  const handleDelete = async () => {
-    if (onDelete && id) {
-      await onDelete(id); // Call onDelete if provided
-      setIsModalOpen(false); // Close the modal after deletion
-    }
   };
 
   return (
@@ -60,25 +52,16 @@ const WordTypeForm = ({ onSubmit, onDelete, initialType = '', mode, id }: WordTy
                 onChange={(e) => setWordType(e.target.value)}
                 placeholder="Enter word type"
                 className="p-2 border rounded w-full"
-                disabled={mode === 'edit'} // Disable input in edit mode
+                disabled={mode === 'edit'}
               />
               <div className="flex justify-end space-x-4 mt-4">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)} // Close modal on cancel
+                  onClick={() => setIsModalOpen(false)} 
                   className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
                 >
                   Cancel
                 </button>
-                {mode === 'edit' && (
-                  <button
-                    type="button"
-                    onClick={handleDelete} // Handle delete action
-                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                  >
-                    Delete
-                  </button>
-                )}
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"

@@ -26,6 +26,8 @@ model WordTypeCategory {
   wordtypeId Int
   WordType   WordType   @relation(fields: [wordtypeId], references: [id], onDelete: Cascade)
   Word       Word[]
+
+  @@unique([category, wordtypeId]) // Compound unique constraint
 }
 
 model Word {

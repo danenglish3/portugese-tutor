@@ -4,27 +4,34 @@ import { useState, useTransition, useEffect } from 'react';
 import PencilSVG from './icons/Pencil';
 
 interface WordTypeCategoryFormProps {
-  onSubmit: (category: string, wordTypeId: string) => Promise<void>; // Include wordTypeId for relation
-  initialCategory?: string; // This will be passed for editing
-  mode: 'add' | 'edit'; // Mode to differentiate between adding and editing
-  wordTypeId: string; // ID of the related word type
+  onSubmit: (category: string, wordTypeId: number) => Promise<void>; 
+  initialCategory?: string;
+  mode: 'add' | 'edit'; 
+  wordTypes: any[];
 }
 
-const WordTypeCategoryForm = ({ onSubmit, initialCategory = '', mode, wordTypeId }: WordTypeCategoryFormProps) => {
+const WordTypeCategoryForm = ({ onSubmit, initialCategory = '', mode, wordTypes }: WordTypeCategoryFormProps) => {
   const [category, setCategory] = useState(initialCategory);
+  const [types, setTypes] = useState(wordTypes);
+  const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setCategory(initialCategory); // Update category when initialCategory changes
+    setCategory(initialCategory); 
   }, [initialCategory]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (selectedTypeId == null) {
+      return;
+    }
+
     startTransition(async () => {
-      await onSubmit(category, wordTypeId); // Pass wordTypeId with category
-      setCategory(''); // Clear input field after submission
-      setIsModalOpen(false); // Close the modal after submission
+      await onSubmit(category, selectedTypeId);
+      setCategory(''); 
+      setIsModalOpen(false);
     });
   };
 
@@ -46,6 +53,18 @@ const WordTypeCategoryForm = ({ onSubmit, initialCategory = '', mode, wordTypeId
             </h2>
 
             <form onSubmit={handleSubmit} className="mb-4">
+              <label>Type: </label>
+              <select
+                className="mb-4"
+                onChange={(e) => setSelectedTypeId(Number(e.target.value))}
+              >
+                <option value="">Select a type</option>
+                {types?.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.type}
+                  </option>
+                ))}
+              </select>
               <input
                 type="text"
                 value={category}
