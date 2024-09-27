@@ -5,12 +5,13 @@ import WordTypeForm from "@/components/WordTypeForm"; // Reusable form for add/e
 import PencilSVG from "./icons/Pencil";
 
 interface WordTypeTableProps {
-  wordTypes: any[]; // List of word types
+  wordTypes: any[]; // List of word types or categories
   onAdd: (type: string) => Promise<void>; // Server action for adding
   onDelete: (id: number) => Promise<void>; // Server action for deleting
+  type: 'wordType' | 'wordTypeCategory'; // New prop to specify the type
 }
 
-const WordTypeTable = ({ wordTypes: initialWordTypes, onAdd, onDelete }: WordTypeTableProps) => {
+const WordTypeTable = ({ wordTypes: initialWordTypes, onAdd, onDelete, type }: WordTypeTableProps) => {
   const [wordTypes, setWordTypes] = useState(initialWordTypes); // Local state for word types
   const [selectedWordType, setSelectedWordType] = useState<any | null>(null); // For editing
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal state for edit
@@ -53,7 +54,7 @@ const WordTypeTable = ({ wordTypes: initialWordTypes, onAdd, onDelete }: WordTyp
         <thead>
           <tr>
             <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">Type</th>
+            <th className="px-4 py-2">{type === 'wordType' ? 'Type' : 'Category'}</th> {/* Dynamic header */}
           </tr>
         </thead>
         <tbody>
@@ -61,20 +62,19 @@ const WordTypeTable = ({ wordTypes: initialWordTypes, onAdd, onDelete }: WordTyp
             wordTypes.map((wordType: any) => (
               <tr key={wordType.id}>
                 <td className="border px-4 py-2">{wordType.id}</td>
-                <td className="border px-4 py-2">{wordType.type}
+                <td className="border px-4 py-2">{wordType.type || wordType.category} {/* Dynamic data */}
                 <button
                     onClick={() => openEditModal(wordType)}
                     className="px-4 py-2 text-blue-500 rounded-md hover:text-blue-600 float-right"
                   >
                     <PencilSVG />
                   </button>
-
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={3} className="text-center py-4 text-gray-500">No Word Types Found</td>
+              <td colSpan={3} className="text-center py-4 text-gray-500">No {type === 'wordType' ? 'Word Types' : 'Categories'} Found</td> {/* Dynamic message */}
             </tr>
           )}
         </tbody>
@@ -84,11 +84,11 @@ const WordTypeTable = ({ wordTypes: initialWordTypes, onAdd, onDelete }: WordTyp
       {isEditModalOpen && selectedWordType && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-lg w-80">
-            <h2 className="text-xl font-semibold mb-4">Edit Word Type</h2>
+            <h2 className="text-xl font-semibold mb-4">Edit {type === 'wordType' ? 'Word Type' : 'Category'}</h2> {/* Dynamic title */}
 
             <input
               type="text"
-              value={selectedWordType.type}
+              value={selectedWordType.type || selectedWordType.category} // Dynamic input value
               disabled
               className="p-2 border rounded w-full mb-4"
             />
