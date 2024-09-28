@@ -1,11 +1,11 @@
 "use client"
 
 import WordTypeTable from '@/components/WordTypeTable'; // Import the dynamic table component
-import { createWordTypeCategory, getWordTypeCategories, deleteWordTypeCategory } from '@/api/WordTypeCategory'; // Import necessary API functions
 import Link from 'next/link';
 import { useEffect, useState } from "react";
 import WordTypeCategoryForm from '@/app/components/WordTypeCategoryForm';
 import { useToast } from '@/app/components/toast/ToastContext';
+import { createWordTypeCategory, deleteWordTypeCategory } from '@/api/wordTypeCategory';
 
 interface ManageWordTypeCategoryProps {
   categories: any[];

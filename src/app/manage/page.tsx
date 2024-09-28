@@ -14,7 +14,7 @@ const Manage = () => {
             Manage Word Type Categories
         </Link>
 
-        <Link href="/manage/word" className="block w-full text-center py-4 bg-white shadow rounded-lg text-lg text-gray-800 hover:bg-gray-200">
+        <Link href="/manage/words" className="block w-full text-center py-4 bg-white shadow rounded-lg text-lg text-gray-800 hover:bg-gray-200">
             Manage Words
         </Link>
       </div>
