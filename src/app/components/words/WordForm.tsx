@@ -125,6 +125,10 @@ export default function WordForm({ wordTypes, onSubmit, initialData, wordTypeCat
         />
       </div>
 
+      <div className='my-4'>
+        <p className='text-bold text-2xl'>ç  á  é  í  ó  ú  â  ê  ô  ã  õ</p>
+      </div>
+
       <div className="flex items-center justify-between">
         <button type="button" onClick={handleClear} className="text-blue-500 underline">
           Clear
