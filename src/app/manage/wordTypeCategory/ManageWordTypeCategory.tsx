@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from "react";
 import WordTypeCategoryForm from '@/app/components/WordTypeCategoryForm';
 import { useToast } from '@/app/components/toast/ToastContext';
-import { createWordTypeCategory, deleteWordTypeCategory } from '@/api/wordTypeCategory';
+import { createWordTypeCategory, deleteWordTypeCategory } from '@/api/WordTypeCategory';
 
 interface ManageWordTypeCategoryProps {
   categories: any[];

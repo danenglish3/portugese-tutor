@@ -36,7 +36,7 @@ const Words = (props: WordsProps) => {
     try {
       await deleteWord(id);
       showToast(`Word deleted successfully!`, 'success');
-      setWords((prev) => prev.filter((wt) => wt.id !== id));
+      setWords((prev: any) => prev.filter((wt: any) => wt.id !== id));
     } catch (error: any) {
       showToast(`An error occurred: ${error.message ?? ""}`, "error");
     }
@@ -55,7 +55,7 @@ const Words = (props: WordsProps) => {
           data.wordtypeId, data.wordtypecategoryId
         );
         showToast(`Word '${result.original}' created successfully!`, 'success');
-        setWords((prev) => [...prev, result]);
+        setWords((prev: any) => [...prev, result]);
         setIsModalOpen(false);
       } catch (error: any) {
         showToast(`An error occurred: ${error.message ?? ""}`, "error");

@@ -3,7 +3,7 @@
 import { getWordTypes } from "@/api/wordType";
 import Words from "./Words";
 import { getWordTypeCategories } from "@/api/WordTypeCategory";
-import { getWords } from "@/api/Word";
+import { getWords } from "@/api/word";
 
 const ManageWordType = async (): Promise<React.JSX.Element> => {
   const wordTypes = await getWordTypes();

@@ -1,6 +1,6 @@
 "use server"
 
-import { getWordTypeCategories } from '@/api/wordTypeCategory';
+import { getWordTypeCategories } from '@/api/WordTypeCategory';
 import ManageWordTypeCategory from './ManageWordTypeCategory';
 import { getWordTypes } from '@/api/wordType';
 
