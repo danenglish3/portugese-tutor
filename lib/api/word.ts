@@ -10,6 +10,26 @@ export async function getWords() {
     });
 }
 
+// Get all words for type
+export async function getWordsForType(wordtypeId: number) {
+    return await prismaHandler({
+        model: 'word',
+        action: 'findMany',
+        args: {
+            where: {
+                wordtypeId: wordtypeId,
+            },
+            select: {
+                id: true,
+                original: true,
+                translation: true,
+                description: true,
+                markedAsStudied: true,
+            },
+        }
+    });
+}
+
 // Get a word by ID
 export async function getWordById(id: number) {
     return await prismaHandler({

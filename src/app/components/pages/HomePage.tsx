@@ -1,5 +1,6 @@
 "use client"
 
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 interface HomePageProps {
@@ -25,14 +26,19 @@ export default function HomePage(props: HomePageProps) {
 
       {/* Categories Grid */}
       <div className="grid grid-cols-2 gap-4 p-4 w-full max-w-md">
+       
         {categories.map((category) => (
-          <div
-            key={category.id}
-            className="flex flex-col items-center justify-center p-4 bg-white rounded-md shadow-sm border border-gray-200"
-          >
-            <h2 className="text-lg font-semibold">{category.type}</h2>
-            <p className="text-gray-500">{wordtypeCategories.filter(a => a.wordtypeId == category.id).map(a => a.category).join(", ")}</p>
-          </div>
+             <Link
+             href={`/type/${category.id}`}
+            >
+                <div
+                    key={category.id}
+                    className="flex flex-col items-center justify-center p-4 bg-white rounded-md shadow-sm border border-gray-200"
+                >
+                    <h2 className="text-lg font-semibold">{category.type}</h2>
+                    <p className="text-gray-500">{wordtypeCategories.filter(a => a.wordtypeId == category.id).map(a => a.category).join(", ")}</p>
+                </div>
+            </Link>
         ))}
       </div>
 
