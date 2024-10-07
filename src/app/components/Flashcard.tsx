@@ -5,13 +5,16 @@ import React, { useState } from "react";
 type FlashcardProps = {
   original: string;
   translation: string;
+  isFlipped: boolean;
+  onFlipChange: (flipped: boolean) => void;
 };
 
-const Flashcard: React.FC<FlashcardProps> = ({ original, translation }: FlashcardProps) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+const Flashcard: React.FC<FlashcardProps> = ({ original, translation, isFlipped, onFlipChange }: FlashcardProps) => {
+  // const [isFlipped, setIsFlipped] = useState(false);
 
   const handleFlip = () => {
-    setIsFlipped(!isFlipped);
+    onFlipChange(!isFlipped)
+    // setIsFlipped(!isFlipped);
   };
 
   return (
